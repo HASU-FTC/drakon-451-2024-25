@@ -11,6 +11,10 @@ public class lift extends SubsystemBase {
     DcMotorEx LeftLift;
     DcMotorEx RightLift;
 
+    private final int MIN_POSITION = 0;
+    private final int MAX_POSITION = 2680;
+    private int targetPosition = 0;
+
     public lift(final HardwareMap hardwareMap, final String leftname, final String rightname) {
         LeftLift = hardwareMap.get(DcMotorEx.class,leftname);
         RightLift = hardwareMap.get(DcMotorEx.class,rightname);
@@ -25,7 +29,7 @@ public class lift extends SubsystemBase {
     }
 
     public void high() {
-        liftpid.setSetPoint(2688);
+        liftpid.setSetPoint(MAX_POSITION);
 
         while (!liftpid.atSetPoint()){
             double target = liftpid.calculate(
@@ -39,7 +43,7 @@ public class lift extends SubsystemBase {
     }
 
     public void middle() {
-        liftpid.setSetPoint(1500);
+        liftpid.setSetPoint(MAX_POSITION/2);
 
         while (!liftpid.atSetPoint()){
             double target = liftpid.calculate(
@@ -53,7 +57,7 @@ public class lift extends SubsystemBase {
     }
 
     public void low() {
-        liftpid.setSetPoint(0);
+        liftpid.setSetPoint(MIN_POSITION);
 
         while (!liftpid.atSetPoint()){
             double target = liftpid.calculate(
@@ -64,5 +68,24 @@ public class lift extends SubsystemBase {
         }
         LeftLift.setPower(0);
         RightLift.setPower(0);
+    }
+
+    public void IncreasePosition(int step) {
+        targetPosition = Math.min(targetPosition + step, MAX_POSITION);
+    }
+
+    public void DecrementPosition(int step) {
+        targetPosition = Math.max(targetPosition - step, MIN_POSITION);
+    }
+
+    @Override
+    public void periodic() {
+        int currentPosition = LeftLift.getCurrentPosition();
+        double output = liftpid.calculate(currentPosition, targetPosition);
+        LeftLift.setPower(output);
+    }
+
+    public int getTargetPosition() {
+        return targetPosition;
     }
 }

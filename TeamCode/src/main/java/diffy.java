@@ -13,7 +13,7 @@ public class diffy extends SubsystemBase {
         rightdiffy = hMap.get(Servo.class, rightname);
     }
 
-    public void diffypitch(double inputY) {
+    public void DiffyPitch(double inputY) {
         double leftpos = (inputY + 1.0) / 2.0;
         double rightpos = 1 - ((inputY +1.0) / 2.0);
 
@@ -24,7 +24,7 @@ public class diffy extends SubsystemBase {
         rightdiffy.setPosition(rightpos);
     }
 
-    public void diffyroll(double inputx) {
+    public void DiffyRoll(double inputx) {
         double leftpos = (inputx + 1.0) / 2.0;
         double rightpos = 1 - ((inputx +1.0) / 2.0);
 
@@ -35,18 +35,28 @@ public class diffy extends SubsystemBase {
         rightdiffy.setPosition(rightpos);
     }
 
-    public void diffyup(){
+    public void DiffyUp(){
         leftdiffy.setPosition(1);
         rightdiffy.setPosition(0);
     }
 
-    public void diffydown() {
+    public void DiffyDown() {
         leftdiffy.setPosition(0);
         rightdiffy.setPosition(1);
     }
 
-    public void diffyreset() {
+    public void DiffyReset() {
         leftdiffy.setPosition(0.5);
+        rightdiffy.setPosition(0.5);
+    }
+
+    public void DiffyVerticalDown() {
+        leftdiffy.setPosition(0.5);
+        rightdiffy.setPosition(0);
+    }
+
+    public void DiffyVerticalUp() {
+        leftdiffy.setPosition(0);
         rightdiffy.setPosition(0.5);
     }
 
