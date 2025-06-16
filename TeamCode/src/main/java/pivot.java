@@ -12,6 +12,11 @@ public class pivot extends SubsystemBase {
     DcMotorEx LeftPivot;
     DcMotorEx RightPivot;
 
+    private final int MIN_POSITION = 0;
+    private final int MAX_POSITION = 697;
+    private int targetPosition = 0;
+
+
     public pivot(final HardwareMap hardwareMap, final String leftname, final String rightname) {
         LeftPivot = hardwareMap.get(DcMotorEx.class,leftname);
         RightPivot = hardwareMap.get(DcMotorEx.class,rightname);
@@ -26,28 +31,63 @@ public class pivot extends SubsystemBase {
     }
 
     public void up() {
-        double lefttarget = pivotpid.calculate(697,LeftPivot.getCurrentPosition());
-        double righttarget = pivotpid.calculate(697,RightPivot.getCurrentPosition());
+        pivotpid.setSetPoint(MAX_POSITION);
 
-        LeftPivot.setVelocity(lefttarget);
-        RightPivot.setVelocity(righttarget);
+        while (!pivotpid.atSetPoint()){
+            double target = pivotpid.calculate(
+                    LeftPivot.getCurrentPosition()
+            );
+            LeftPivot.setVelocity(target);
+            RightPivot.setVelocity(target);
+        }
+        LeftPivot.setPower(0);
+        RightPivot.setPower(0);
     }
 
     public void middle() {
-        double lefttarget = pivotpid.calculate(545,LeftPivot.getCurrentPosition());
-        double righttarget = pivotpid.calculate(545,RightPivot.getCurrentPosition());
+        pivotpid.setSetPoint(MAX_POSITION/2);
 
-        LeftPivot.setVelocity(lefttarget);
-        RightPivot.setVelocity(righttarget);
+        while (!pivotpid.atSetPoint()){
+            double target = pivotpid.calculate(
+                    LeftPivot.getCurrentPosition()
+            );
+            LeftPivot.setVelocity(target);
+            RightPivot.setVelocity(target);
+        }
+        LeftPivot.setPower(0);
+        RightPivot.setPower(0);
     }
 
     public void down() {
-        double lefttarget = pivotpid.calculate(0,LeftPivot.getCurrentPosition());
-        double righttarget = pivotpid.calculate(0,RightPivot.getCurrentPosition());
+        pivotpid.setSetPoint(MIN_POSITION);
 
-        LeftPivot.setVelocity(lefttarget);
-        RightPivot.setVelocity(righttarget);
+        while (!pivotpid.atSetPoint()){
+            double target = pivotpid.calculate(
+                    LeftPivot.getCurrentPosition()
+            );
+            LeftPivot.setVelocity(target);
+            RightPivot.setVelocity(target);
+        }
+        LeftPivot.setPower(0);
+        RightPivot.setPower(0);
+    }
 
+    public void IncrementPosition(int step) {
+        targetPosition = Math.min(targetPosition + step, MAX_POSITION);
+    }
 
+    public void DecrementPosition(int step) {
+        targetPosition = Math.max(targetPosition - step, MIN_POSITION);
+    }
+
+    @Override
+    public void periodic() {
+        int currentPosition = LeftPivot.getCurrentPosition();
+        double output = pivotpid.calculate(currentPosition, targetPosition);
+        LeftPivot.setPower(output);
+    }
+
+    public int getTargetPosition() {
+        return targetPosition;
     }
 }
