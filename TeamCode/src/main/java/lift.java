@@ -1,3 +1,4 @@
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -5,6 +6,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.controller.PIDFController;
 import com.seattlesolvers.solverslib.hardware.motors.*;
+
+@Config
 public class lift extends SubsystemBase {
 
     PIDFController liftpid = new PIDFController(0.05,0,0,1);
@@ -70,7 +73,7 @@ public class lift extends SubsystemBase {
         RightLift.setPower(0);
     }
 
-    public void IncreasePosition(int step) {
+    public void IncrementPosition(int step) {
         targetPosition = Math.min(targetPosition + step, MAX_POSITION);
     }
 

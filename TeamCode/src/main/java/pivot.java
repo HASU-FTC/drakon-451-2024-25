@@ -1,10 +1,11 @@
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.controller.PIDFController;
 
 import org.firstinspires.ftc.teamcode.R;
-
+@Config
 public class pivot extends SubsystemBase {
     PIDFController pivotpid = new PIDFController(0.05,0,0,1);
 
