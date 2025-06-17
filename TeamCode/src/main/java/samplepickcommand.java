@@ -14,7 +14,7 @@ public class samplepickcommand extends ParallelCommandGroup {
                 new liftmiddlecommand(lift_motors),
                 new pivotdowncommand(pivot_motors),
                 new diffydowncommand(diffy_servos),
-                new clawopencommand(claw_servo)
+                new clawclosecommand(claw_servo)
 
         );
         addRequirements(claw_servo);

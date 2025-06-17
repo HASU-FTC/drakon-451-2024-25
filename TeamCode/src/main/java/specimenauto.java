@@ -171,31 +171,31 @@ public class specimenauto extends CommandOpMode {
                 break;
             case 2:
                 if (!follower.isBusy()) {
-                    follower.followPath(push1, true);
+                    follower.followPath(push1);
                     setPathState(3);
                 }
                 break;
             case 3:
                 if (!follower.isBusy()) {
-                    follower.followPath(return1, true);
+                    follower.followPath(return1);
                     setPathState(4);
                 }
                 break;
             case 4:
                 if (!follower.isBusy()) {
-                    follower.followPath(push2, true);
+                    follower.followPath(push2);
                     setPathState(5);
                 }
                 break;
             case 5:
                 if (!follower.isBusy()) {
-                    follower.followPath(return2, true);
+                    follower.followPath(return2);
                     setPathState(6);
                 }
                 break;
             case 6:
                 if (!follower.isBusy()) {
-                    follower.followPath(push3, true);
+                    follower.followPath(push3);
                     setPathState(7);
                 }
                 break;
@@ -261,6 +261,11 @@ public class specimenauto extends CommandOpMode {
                     new samplepickcommand(pivot_motors,lift_motors,diffy_servos,claw_servo);
                     follower.followPath(specreturn4, true);
                     setPathState(16);
+                }
+                break;
+            case 16:
+                if (!follower.isBusy()) {
+                    setPathState(-1);
                 }
                 break;
         }

@@ -1,5 +1,6 @@
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
+import com.seattlesolvers.solverslib.command.WaitCommand;
 
 public class samplescorecommand extends SequentialCommandGroup {
     private final pivot pivot_motors;
@@ -18,7 +19,9 @@ public class samplescorecommand extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                         new diffyupcommand(diffy_servos),
                         new pivotupcommand(pivot_motors),
-                        new lifthighcommand(lift_motors))
+                        new lifthighcommand(lift_motors)),
+                new WaitCommand(150),
+                new clawopencommand(claw_servo)
         );
         addRequirements(
                 claw_servo,
