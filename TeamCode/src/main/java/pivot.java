@@ -24,6 +24,9 @@ public class pivot extends SubsystemBase {
         LeftPivot.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         RightPivot.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
+        LeftPivot.setTargetPosition(targetPosition);
+        RightPivot.setTargetPosition(targetPosition);
+
         LeftPivot.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         RightPivot.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
 

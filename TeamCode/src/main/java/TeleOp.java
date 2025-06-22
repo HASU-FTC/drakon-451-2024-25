@@ -1,4 +1,5 @@
 import com.seattlesolvers.solverslib.command.CommandOpMode;
+import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.drivebase.MecanumDrive;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
@@ -17,7 +18,6 @@ public class TeleOp extends CommandOpMode {
 
         GamepadEx gamepad1Ex = new GamepadEx(gamepad1);
         GamepadEx gamepad2Ex = new GamepadEx(gamepad2);
-        waitForStart();
 
         lift_motors = new lift(hardwareMap, "leftlift", "rightlift");
         pivot_motors = new pivot(hardwareMap, "leftpivot", "rightpivot");
@@ -31,17 +31,19 @@ public class TeleOp extends CommandOpMode {
 
 
         MecanumDrive drive = new MecanumDrive(
-                new Motor(hardwareMap, "frontLeft", Motor.GoBILDA.RPM_312),
-                new Motor(hardwareMap, "frontRight", Motor.GoBILDA.RPM_312),
-                new Motor(hardwareMap, "rearLeft", Motor.GoBILDA.RPM_312),
-                new Motor(hardwareMap, "rearRight", Motor.GoBILDA.RPM_312)
+                new Motor(hardwareMap, "leftFront", Motor.GoBILDA.RPM_312),
+                new Motor(hardwareMap, "rightFront", Motor.GoBILDA.RPM_312),
+                new Motor(hardwareMap, "leftRear", Motor.GoBILDA.RPM_312),
+                new Motor(hardwareMap, "rightRear", Motor.GoBILDA.RPM_312)
         );
 
-        drive.driveRobotCentric(
-                gamepad1Ex.getLeftX(),
-                gamepad1Ex.getLeftY(),
-                gamepad1Ex.getRightX(),
-                false
+        schedule(
+                new RunCommand(() -> drive.driveRobotCentric(
+                        gamepad1Ex.getLeftX(),
+                        gamepad1Ex.getLeftY(),
+                        gamepad1Ex.getRightX(),
+                        false
+                ))
         );
 
         schedule(new lifttriggercommand(lift_motors, gamepad2Ex));

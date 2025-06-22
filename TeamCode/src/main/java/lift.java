@@ -25,6 +25,9 @@ public class lift extends SubsystemBase {
         LeftLift.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         RightLift.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
+        LeftLift.setTargetPosition(targetPosition);
+        RightLift.setTargetPosition(targetPosition);
+
         LeftLift.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         RightLift.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
 

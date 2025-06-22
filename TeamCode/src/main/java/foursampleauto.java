@@ -8,18 +8,19 @@ import com.pedropathing.pathgen.Point;
 import com.pedropathing.util.Constants;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
 @Autonomous(name = "4 Sample Auto")
-public class foursampleauto extends CommandOpMode{
+public class foursampleauto extends OpMode {
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
 
-    private final pivot pivot_motors = new pivot(hardwareMap, "leftpivot", "rightpivot");
-    private final lift lift_motors = new lift(hardwareMap, "leftlift", "rightlift");
-    private final diffy diffy_servos = new diffy(hardwareMap, "leftdiffyservo", "rightdiffyservo");
-    private final claw claw_servo = new claw(hardwareMap, "clawservo");
+    private pivot pivot_motors;
+    private lift lift_motors;
+    private diffy diffy_servos;
+    private claw claw_servo;
 
     private int pathState;
 
@@ -44,10 +45,7 @@ public class foursampleauto extends CommandOpMode{
 
 
     private Path preload, park;
-    private PathChain samplepick2, samplescore2;
-    private PathChain samplepick3, samplescore3;
-    private PathChain samplepick4, samplescore4;
-
+    private PathChain samplepick2, samplescore2,samplepick3, samplescore3, samplepick4, samplescore4;
     public void buildPaths(){
 
         //scoring preload (sample 1)
@@ -70,7 +68,7 @@ public class foursampleauto extends CommandOpMode{
                 .addPath(new BezierLine(new Point(samplescore2pose), new Point(samplepick3pose)))
                 .setLinearHeadingInterpolation(samplescore2pose.getHeading(), samplepick3pose.getHeading())
                 .build();
-        samplescore2 = follower.pathBuilder()
+        samplescore3 = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(samplepick3pose), new Point(samplescore3pose)))
                 .setLinearHeadingInterpolation(samplepick3pose.getHeading(), samplescore3pose.getHeading())
                 .build();
@@ -157,10 +155,30 @@ public class foursampleauto extends CommandOpMode{
     }
 
     @Override
-    public void initialize() {
+    public void loop() {
+
+        // These loop the movements of the robot
+        follower.update();
+        autonomousPathUpdate();
+
+        // Feedback to Driver Hub
+        telemetry.addData("path state", pathState);
+        telemetry.addData("x", follower.getPose().getX());
+        telemetry.addData("y", follower.getPose().getY());
+        telemetry.addData("heading", follower.getPose().getHeading());
+        telemetry.update();
+    }
+
+    @Override
+    public void init() {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();
+
+        pivot_motors = new pivot(hardwareMap, "leftpivot", "rightpivot");
+        lift_motors = new lift(hardwareMap, "leftlift", "rightlift");
+        diffy_servos = new diffy(hardwareMap, "leftdiffyservo", "rightdiffyservo");
+        claw_servo = new claw(hardwareMap, "clawservo");
 
         Constants.setConstants(FConstants.class, LConstants.class);
         follower = new Follower(hardwareMap, FConstants.class, LConstants.class);
@@ -169,15 +187,15 @@ public class foursampleauto extends CommandOpMode{
     }
 
     @Override
-    public void initialize_loop() {}
+    public void init_loop() {}
 
     @Override
-    public void run() {
+    public void start() {
         opmodeTimer.resetTimer();
         setPathState(0);
     }
 
     @Override
-    public void end() {
+    public void stop() {
     }
 }
